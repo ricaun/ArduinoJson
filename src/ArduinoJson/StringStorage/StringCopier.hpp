@@ -4,22 +4,22 @@
 
 #pragma once
 
+#include "../Memory/MemoryPool.hpp"
 #include "../Memory/StringBuilder.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
-template <typename TMemoryPool>
 class StringCopier {
  public:
   typedef ARDUINOJSON_NAMESPACE::StringBuilder StringBuilder;
 
-  StringCopier(TMemoryPool& memoryPool) : _memoryPool(&memoryPool) {}
+  StringCopier(MemoryPool* memoryPool) : _memoryPool(memoryPool) {}
 
   StringBuilder startString() {
-    return _memoryPool->startString();
+    return StringBuilder(_memoryPool);
   }
 
  private:
-  TMemoryPool* _memoryPool;
+  MemoryPool* _memoryPool;
 };
 }  // namespace ARDUINOJSON_NAMESPACE
