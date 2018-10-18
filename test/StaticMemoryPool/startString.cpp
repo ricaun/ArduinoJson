@@ -8,8 +8,6 @@
 using namespace ARDUINOJSON_NAMESPACE;
 
 TEST_CASE("StaticMemoryPool::startString()") {
-  typedef StaticMemoryPoolBase::StringBuilder StringBuilder;
-
   SECTION("WorksWhenBufferIsBigEnough") {
     StaticMemoryPool<6> memoryPool;
 

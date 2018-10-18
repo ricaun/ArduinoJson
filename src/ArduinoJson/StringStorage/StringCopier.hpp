@@ -4,14 +4,16 @@
 
 #pragma once
 
+#include "../Memory/StringBuilder.hpp"
+
 namespace ARDUINOJSON_NAMESPACE {
 
 template <typename TMemoryPool>
 class StringCopier {
  public:
-  StringCopier(TMemoryPool& memoryPool) : _memoryPool(&memoryPool) {}
+  typedef ARDUINOJSON_NAMESPACE::StringBuilder StringBuilder;
 
-  typedef typename TMemoryPool::StringBuilder StringBuilder;
+  StringCopier(TMemoryPool& memoryPool) : _memoryPool(&memoryPool) {}
 
   StringBuilder startString() {
     return _memoryPool->startString();

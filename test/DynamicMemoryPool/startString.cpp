@@ -7,8 +7,6 @@
 
 using namespace ARDUINOJSON_NAMESPACE;
 
-typedef DynamicMemoryPool::StringBuilder StringBuilder;
-
 TEST_CASE("DynamicMemoryPool::startString()") {
   SECTION("WorksWhenBufferIsBigEnough") {
     DynamicMemoryPool memoryPool(6);

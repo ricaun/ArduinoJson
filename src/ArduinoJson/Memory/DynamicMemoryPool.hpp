@@ -6,6 +6,7 @@
 
 #include "../Strings/StringInMemoryPool.hpp"
 #include "MemoryPool.hpp"
+#include "StringBuilder.hpp"
 
 #include <stdlib.h>  // malloc, free
 
@@ -93,29 +94,6 @@ class DynamicMemoryPoolBase : public MemoryPool {
     }
     _head = 0;
   }
-
-  class StringBuilder {
-   public:
-    explicit StringBuilder(DynamicMemoryPoolBase* parent)
-        : _parent(parent), _size(0) {
-      _start = static_cast<char*>(_parent->alloc(1));
-    }
-
-    void append(char c) {
-      _start = _parent->realloc(_start, _size + 1, _size + 2);
-      if (_start) _start[_size++] = c;
-    }
-
-    StringInMemoryPool complete() {
-      if (_start) _start[_size] = 0;
-      return _start;
-    }
-
-   private:
-    DynamicMemoryPoolBase* _parent;
-    char* _start;
-    size_t _size;
-  };
 
   StringBuilder startString() {
     return StringBuilder(this);

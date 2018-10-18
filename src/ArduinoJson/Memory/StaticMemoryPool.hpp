@@ -7,34 +7,12 @@
 #include "../Polyfills/mpl/max.hpp"
 #include "../Strings/StringInMemoryPool.hpp"
 #include "MemoryPool.hpp"
+#include "StringBuilder.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
 class StaticMemoryPoolBase : public MemoryPool {
  public:
-  class StringBuilder {
-   public:
-    explicit StringBuilder(StaticMemoryPoolBase* parent)
-        : _parent(parent), _start(0), _size(0) {
-      _start = static_cast<char*>(_parent->alloc(1));
-    }
-
-    void append(char c) {
-      _start = _parent->realloc(_start, _size + 1, _size + 2);
-      if (_start) _start[_size++] = c;
-    }
-
-    StringInMemoryPool complete() {
-      if (_start) _start[_size] = 0;
-      return _start;
-    }
-
-   private:
-    StaticMemoryPoolBase* _parent;
-    char* _start;
-    size_t _size;
-  };
-
   // Gets the capacity of the memoryPool in bytes
   size_t capacity() const {
     return _capacity;

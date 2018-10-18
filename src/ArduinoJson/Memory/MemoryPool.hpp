@@ -21,6 +21,8 @@ class MemoryPool {
   // Return a pointer to the allocated memory or NULL if allocation fails.
   virtual void *alloc(size_t size) = 0;
 
+  virtual char *realloc(char *oldPtr, size_t oldSize, size_t newSize) = 0;
+
  protected:
   // CAUTION: NO VIRTUAL DESTRUCTOR!
   // If we add a virtual constructor the Arduino compiler will add malloc()
