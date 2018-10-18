@@ -14,30 +14,25 @@ class StaticMemoryPoolBase : public MemoryPool {
  public:
   class StringBuilder {
    public:
-    explicit StringBuilder(StaticMemoryPoolBase* parent) : _parent(parent) {
-      _start = parent->_buffer + parent->_size;
+    explicit StringBuilder(StaticMemoryPoolBase* parent)
+        : _parent(parent), _start(0), _size(0) {
+      _start = static_cast<char*>(_parent->alloc(1));
     }
 
     void append(char c) {
-      if (_parent->canAlloc(1)) {
-        char* last = static_cast<char*>(_parent->doAlloc(1));
-        *last = c;
-      }
+      _start = _parent->realloc(_start, _size + 1, _size + 2);
+      if (_start) _start[_size++] = c;
     }
 
-    StringInMemoryPool complete() const {
-      if (_parent->canAlloc(1)) {
-        char* last = static_cast<char*>(_parent->doAlloc(1));
-        *last = '\0';
-        return _start;
-      } else {
-        return NULL;
-      }
+    StringInMemoryPool complete() {
+      if (_start) _start[_size] = 0;
+      return _start;
     }
 
    private:
     StaticMemoryPoolBase* _parent;
     char* _start;
+    size_t _size;
   };
 
   // Gets the capacity of the memoryPool in bytes
@@ -55,6 +50,13 @@ class StaticMemoryPoolBase : public MemoryPool {
     alignNextAlloc();
     if (!canAlloc(bytes)) return NULL;
     return doAlloc(bytes);
+  }
+
+  char* realloc(char* oldPtr, size_t oldSize, size_t newSize) {
+    size_t n = newSize - oldSize;
+    if (!canAlloc(n)) return NULL;
+    doAlloc(n);
+    return oldPtr;
   }
 
   // Resets the memoryPool.
@@ -82,8 +84,8 @@ class StaticMemoryPoolBase : public MemoryPool {
     return _size + bytes <= _capacity;
   }
 
-  void* doAlloc(size_t bytes) {
-    void* p = &_buffer[_size];
+  char* doAlloc(size_t bytes) {
+    char* p = &_buffer[_size];
     _size += bytes;
     return p;
   }
