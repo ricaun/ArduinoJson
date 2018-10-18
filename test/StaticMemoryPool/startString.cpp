@@ -40,12 +40,9 @@ TEST_CASE("StaticMemoryPool::startString()") {
     StaticMemoryPool<5> memoryPool;
 
     StringBuilder str = memoryPool.startString();
-    // REQUIRE(0 == memoryPool.size());
-
     str.append('h');
-    // REQUIRE(1 == memoryPool.size());
-
     str.complete();
+
     REQUIRE(2 == memoryPool.size());
   }
 }
