@@ -41,7 +41,7 @@ inline JsonVariantData* arrayGet(const JsonArrayData* arr, size_t index) {
   return slot ? &slot->value : 0;
 }
 
-inline void arrayRemove(JsonArrayData* arr, Slot* slot) {
+inline void arrayRemove(JsonArrayData* arr, Slot* slot, MemoryPool* pool) {
   if (!arr || !slot) return;
 
   if (slot->prev)
@@ -52,10 +52,12 @@ inline void arrayRemove(JsonArrayData* arr, Slot* slot) {
     slot->next->prev = slot->prev;
   else
     arr->tail = slot->prev;
+
+  pool->freeSlot(slot);
 }
 
-inline void arrayRemove(JsonArrayData* arr, size_t index) {
-  arrayRemove(arr, arrayGetSlot(arr, index));
+inline void arrayRemove(JsonArrayData* arr, size_t index, MemoryPool* pool) {
+  arrayRemove(arr, arrayGetSlot(arr, index), pool);
 }
 
 inline void arrayClear(JsonArrayData* arr) {

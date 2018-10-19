@@ -92,4 +92,28 @@ TEST_CASE("DynamicJsonDocument") {
     REQUIRE(json == "{\"hello\":\"world\"}");
     REQUIRE(ddoc.nestingLimit == 42);
   }
+
+  SECTION("memoryUsage()") {
+    typedef ARDUINOJSON_NAMESPACE::Slot Slot;
+
+    SECTION("Increases after add value to array") {
+      JsonArray arr = doc.to<JsonArray>();
+
+      arr.add(42);
+      REQUIRE(sizeof(Slot) == doc.memoryUsage());
+      arr.add(43);
+      REQUIRE(2 * sizeof(Slot) == doc.memoryUsage());
+    }
+
+    SECTION("Decreases after remove value from array") {
+      JsonArray arr = doc.to<JsonArray>();
+      arr.add(42);
+      arr.add(43);
+
+      arr.remove(1);
+      REQUIRE(sizeof(Slot) == doc.memoryUsage());
+      arr.remove(0);
+      REQUIRE(0 == doc.memoryUsage());
+    }
+  }
 }
