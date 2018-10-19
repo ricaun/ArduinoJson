@@ -53,7 +53,7 @@ inline void arrayRemove(JsonArrayData* arr, Slot* slot, MemoryPool* pool) {
   else
     arr->tail = slot->prev;
 
-  pool->freeSlot(slot);
+  slotFree(slot, pool);
 }
 
 inline void arrayRemove(JsonArrayData* arr, size_t index, MemoryPool* pool) {

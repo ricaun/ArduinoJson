@@ -87,7 +87,7 @@ inline void objectRemove(JsonObjectData* obj, Slot* slot, MemoryPool* pool) {
   else
     obj->tail = slot->prev;
 
-  pool->freeSlot(slot);
+  slotFree(slot, pool);
 }
 
 inline size_t objectSize(const JsonObjectData* obj) {
