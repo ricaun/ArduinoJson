@@ -115,5 +115,25 @@ TEST_CASE("DynamicJsonDocument") {
       arr.remove(0);
       REQUIRE(0 == doc.memoryUsage());
     }
+
+    SECTION("Increases after add value to object") {
+      JsonObject obj = doc.to<JsonObject>();
+
+      obj["a"] = 1;
+      REQUIRE(sizeof(Slot) == doc.memoryUsage());
+      obj["b"] = 2;
+      REQUIRE(2 * sizeof(Slot) == doc.memoryUsage());
+    }
+
+    SECTION("Decreases after remove value from object") {
+      JsonObject obj = doc.to<JsonObject>();
+      obj["a"] = 1;
+      obj["b"] = 2;
+
+      obj.remove("a");
+      REQUIRE(sizeof(Slot) == doc.memoryUsage());
+      obj.remove("b");
+      REQUIRE(0 == doc.memoryUsage());
+    }
   }
 }
