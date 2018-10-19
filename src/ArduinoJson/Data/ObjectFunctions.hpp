@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "../Memory/MemoryPool.hpp"
 #include "JsonVariantData.hpp"
 #include "SlotFunctions.hpp"
 
@@ -28,7 +29,7 @@ inline bool objectContainsKey(const JsonObjectData* obj, const TKey& key) {
 template <typename TKey>
 inline JsonVariantData* objectAdd(JsonObjectData* obj, TKey key,
                                   MemoryPool* pool) {
-  Slot* slot = new (pool) Slot();
+  Slot* slot = pool->allocSlot();
   if (!slot) return 0;
 
   slot->next = 0;

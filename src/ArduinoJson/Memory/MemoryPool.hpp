@@ -9,6 +9,7 @@
 #include <string.h>
 
 #include "../Configuration.hpp"
+#include "../Data/Slot.hpp"
 #include "../Polyfills/attributes.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
@@ -22,6 +23,10 @@ class MemoryPool {
   virtual char *alloc(size_t size) = 0;
 
   virtual char *realloc(char *oldPtr, size_t oldSize, size_t newSize) = 0;
+
+  Slot *allocSlot() {
+    return reinterpret_cast<Slot *>(alloc(sizeof(Slot)));
+  }
 
  protected:
   // CAUTION: NO VIRTUAL DESTRUCTOR!

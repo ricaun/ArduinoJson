@@ -13,7 +13,7 @@ namespace ARDUINOJSON_NAMESPACE {
 inline JsonVariantData* arrayAdd(JsonArrayData* arr, MemoryPool* pool) {
   if (!arr) return 0;
 
-  Slot* slot = new (pool) Slot();
+  Slot* slot = pool->allocSlot();
   if (!slot) return 0;
 
   slot->next = 0;

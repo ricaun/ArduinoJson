@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "../Memory/MemoryPool.hpp"
 #include "../Strings/StringTypes.hpp"
 #include "JsonVariantData.hpp"
 #include "Slot.hpp"
